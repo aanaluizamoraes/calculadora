@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 export default function MetaFinanceira() {
   const [ganhoDesejado, setGanhoDesejado] = useState(50000);
@@ -7,6 +7,7 @@ export default function MetaFinanceira() {
   const [percGanhos, setPercGanhos] = useState(25);
   const [percRendimento, setPercRendimento] = useState(12);
   const [showConfig, setShowConfig] = useState(false);
+  const [revealed, setRevealed] = useState(false);
 
   const lucroMensal = ganhoDesejado / (percGanhos / 100);
   const faturamentoMensal = lucroMensal / (percLucro / 100);
@@ -35,170 +36,154 @@ export default function MetaFinanceira() {
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #4c000d 0%, #6b0f0f 50%, #4c000d 100%)',
-      fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
-      color: '#fff',
-      padding: '40px 20px',
+      background: '#ffffff',
+      fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif",
+      color: '#000',
+      padding: '60px 24px',
     }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
         * { box-sizing: border-box; }
-        .card { background: rgba(255,255,255,0.05); border: 1px solid rgba(238,206,102,0.2); border-radius: 20px; backdrop-filter: blur(20px); }
-        .glow { box-shadow: 0 0 60px rgba(238,206,102,0.1), 0 0 100px rgba(238,206,102,0.05); }
-        .number { font-family: 'Cormorant Garamond', serif; font-weight: 700; letter-spacing: -0.02em; }
-        .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; color: rgba(255,225,166,0.6); font-weight: 600; }
-        .gold { color: #eece66; }
-        .gold-bg { background: linear-gradient(135deg, #eece66 0%, #ffe1a6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        input[type="range"] { -webkit-appearance: none; width: 100%; height: 4px; border-radius: 2px; background: rgba(255,225,166,0.2); outline: none; }
-        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: linear-gradient(135deg, #eece66 0%, #ffe1a6 100%); cursor: pointer; box-shadow: 0 0 15px rgba(238,206,102,0.4); }
-        .config-btn { background: rgba(238,206,102,0.1); border: 1px solid rgba(238,206,102,0.3); color: #ffe1a6; padding: 12px 24px; border-radius: 10px; cursor: pointer; font-size: 13px; transition: all 0.2s; font-weight: 500; }
-        .config-btn:hover { background: rgba(238,206,102,0.2); }
-        .step { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
-        .step-number { width: 28px; height: 28px; background: linear-gradient(135deg, #eece66, #ffe1a6); color: #4c000d; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; }
-        .step-text { color: rgba(255,225,166,0.8); font-size: 14px; }
-        .arrow { color: #eece66; font-size: 20px; text-align: center; margin: 8px 0; }
+        .mono { font-family: 'Space Mono', monospace; }
+        .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: #999; font-weight: 500; }
+        input[type="range"] { -webkit-appearance: none; width: 100%; height: 2px; border-radius: 1px; background: #e0e0e0; outline: none; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: #000; cursor: pointer; }
+        .btn { background: #000; color: #fff; border: none; padding: 16px 48px; border-radius: 100px; cursor: pointer; font-size: 15px; font-weight: 500; transition: all 0.2s; }
+        .btn:hover { background: #333; }
+        .btn-ghost { background: transparent; color: #000; border: 1px solid #e0e0e0; }
+        .btn-ghost:hover { background: #f5f5f5; border-color: #ccc; }
+        .fade-in { animation: fadeIn 0.8s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .big-number { font-size: clamp(48px, 12vw, 96px); font-weight: 700; letter-spacing: -0.03em; line-height: 1; }
+        .card { background: #fafafa; border-radius: 16px; padding: 24px; }
       `}</style>
 
-      <div style={{ maxWidth: 800, margin: '0 auto' }}>
-        {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: 40 }}>
-          <div style={{ marginBottom: 16 }}>
-            <svg width="60" height="60" viewBox="0 0 100 100" style={{ opacity: 0.9 }}>
-              <circle cx="50" cy="50" r="45" fill="none" stroke="#eece66" strokeWidth="2"/>
-              <circle cx="50" cy="35" r="15" fill="#ffe1a6"/>
-              <path d="M25 75 Q50 55 75 75" stroke="#eece66" strokeWidth="3" fill="none"/>
-              <path d="M20 50 L35 45 M80 50 L65 45" stroke="#eece66" strokeWidth="2"/>
-            </svg>
-          </div>
-          <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(32px, 6vw, 48px)', fontWeight: 600, marginBottom: 8, lineHeight: 1.1 }}>
-            Calculadora de<br/><span className="gold-bg">Independência Financeira</span>
-          </h1>
-          <p style={{ color: 'rgba(255,225,166,0.6)', fontSize: 15 }}>Descubra exatamente o que você precisa para viver do seu negócio</p>
-        </div>
-
-        {/* Input Principal */}
-        <div className="card glow" style={{ padding: '32px 36px', marginBottom: 20 }}>
-          <div className="label" style={{ marginBottom: 12 }}>Quanto você quer colocar no bolso todo mês?</div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
-            <span style={{ fontSize: 28, fontWeight: 500, color: 'rgba(255,225,166,0.4)' }}>R$</span>
-            <input
-              type="text"
-              value={ganhoDesejado.toLocaleString('pt-BR')}
-              onChange={(e) => {
-                const value = parseInt(e.target.value.replace(/\D/g, '')) || 0;
-                setGanhoDesejado(Math.min(value, 10000000));
-              }}
-              style={{ background: 'transparent', border: 'none', fontSize: 'clamp(36px, 9vw, 64px)', fontFamily: "'Cormorant Garamond', serif", fontWeight: 700, color: '#ffe1a6', width: '100%', outline: 'none' }}
-            />
-          </div>
-          <input type="range" min="5000" max="500000" step="5000" value={ganhoDesejado} onChange={(e) => setGanhoDesejado(parseInt(e.target.value))} />
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6, fontSize: 11, color: 'rgba(255,225,166,0.3)' }}>
-            <span>R$ 5.000</span><span>R$ 500.000</span>
-          </div>
-        </div>
-
-        {/* Fluxo Didático */}
-        <div className="card" style={{ padding: '28px 32px', marginBottom: 20 }}>
-          <div className="label" style={{ marginBottom: 20, textAlign: 'center' }}>Como funciona o cálculo</div>
-          
-          <div className="step">
-            <div className="step-number">1</div>
-            <div className="step-text">Você quer retirar <strong className="gold">{formatCurrency(ganhoDesejado)}</strong>/mês ({percGanhos}% do lucro)</div>
-          </div>
-          <div className="arrow">↓</div>
-          
-          <div className="step">
-            <div className="step-number">2</div>
-            <div className="step-text">Seu lucro precisa ser <strong className="gold">{formatCurrency(lucroMensal)}</strong>/mês</div>
-          </div>
-          <div className="arrow">↓</div>
-          
-          <div className="step">
-            <div className="step-number">3</div>
-            <div className="step-text">Com {percLucro}% de margem, você fatura <strong className="gold">{formatCurrency(faturamentoMensal)}</strong>/mês</div>
-          </div>
-          <div className="arrow">↓</div>
-          
-          <div className="step">
-            <div className="step-number">4</div>
-            <div className="step-text">Sobram <strong className="gold">{formatCurrency(economiaMensal)}</strong>/mês para caixa e investimentos</div>
-          </div>
-        </div>
-
-        {/* Cards de Resumo */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12, marginBottom: 20 }}>
-          <div className="card" style={{ padding: 24, textAlign: 'center' }}>
-            <div className="label" style={{ marginBottom: 6 }}>Faturamento/Mês</div>
-            <div className="number gold" style={{ fontSize: 26 }}>{formatCurrency(faturamentoMensal)}</div>
-          </div>
-          <div className="card" style={{ padding: 24, textAlign: 'center' }}>
-            <div className="label" style={{ marginBottom: 6 }}>Faturamento/Ano</div>
-            <div className="number gold" style={{ fontSize: 26 }}>{formatCurrency(faturamentoMensal * 12)}</div>
-          </div>
-          <div className="card" style={{ padding: 24, textAlign: 'center' }}>
-            <div className="label" style={{ marginBottom: 6 }}>Economia/Ano</div>
-            <div className="number gold" style={{ fontSize: 26 }}>{formatCurrency(economiaAnual)}</div>
-          </div>
-        </div>
-
-        {/* Independência Financeira */}
-        <div className="card glow" style={{ padding: 36, textAlign: 'center', marginBottom: 20, background: 'linear-gradient(135deg, rgba(238,206,102,0.08) 0%, rgba(255,225,166,0.08) 100%)', border: '1px solid rgba(238,206,102,0.25)' }}>
-          <div className="label" style={{ marginBottom: 16 }}>Para viver de renda com {formatCurrency(ganhoDesejado)}/mês você precisa de</div>
-          <div className="number" style={{ fontSize: 'clamp(36px, 9vw, 56px)', color: '#ffe1a6', marginBottom: 6 }}>{formatCurrency(investimentoNecessario)}</div>
-          <div style={{ fontSize: 14, color: 'rgba(255,225,166,0.5)', marginBottom: 28 }}>investidos rendendo {percRendimento}% ao ano</div>
-          
-          <div style={{ display: 'inline-block', background: 'rgba(238,206,102,0.15)', padding: '20px 40px', borderRadius: 14, border: '1px solid rgba(238,206,102,0.2)' }}>
-            <div className="label" style={{ marginBottom: 6 }}>Tempo até a liberdade financeira</div>
-            <div className="number gold-bg" style={{ fontSize: 36 }}>{formatYears(anosIndependencia)}</div>
-            <div style={{ fontSize: 12, color: 'rgba(255,225,166,0.5)', marginTop: 6 }}>guardando {formatCurrency(economiaAnual)} por ano</div>
-          </div>
-        </div>
-
-        {/* Config Toggle */}
-        <div style={{ textAlign: 'center', marginBottom: 16 }}>
-          <button className="config-btn" onClick={() => setShowConfig(!showConfig)}>
-            {showConfig ? '✕ Fechar' : '⚙ Personalizar percentuais'}
-          </button>
-        </div>
-
-        {showConfig && (
-          <div className="card" style={{ padding: 28 }}>
-            <div style={{ display: 'grid', gap: 20 }}>
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8, alignItems: 'center' }}>
-                  <div>
-                    <span className="label">Margem de Lucro</span>
-                    <div style={{ fontSize: 12, color: 'rgba(255,225,166,0.4)', marginTop: 2 }}>% do faturamento que vira lucro</div>
-                  </div>
-                  <span className="number gold" style={{ fontSize: 20 }}>{percLucro}%</span>
-                </div>
-                <input type="range" min="10" max="80" value={percLucro} onChange={(e) => setPercLucro(parseInt(e.target.value))} />
-              </div>
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8, alignItems: 'center' }}>
-                  <div>
-                    <span className="label">Sua Retirada</span>
-                    <div style={{ fontSize: 12, color: 'rgba(255,225,166,0.4)', marginTop: 2 }}>% do lucro que você coloca no bolso</div>
-                  </div>
-                  <span className="number gold" style={{ fontSize: 20 }}>{percGanhos}%</span>
-                </div>
-                <input type="range" min="10" max="90" value={percGanhos} onChange={(e) => setPercGanhos(parseInt(e.target.value))} />
-              </div>
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8, alignItems: 'center' }}>
-                  <div>
-                    <span className="label">Rendimento dos Investimentos</span>
-                    <div style={{ fontSize: 12, color: 'rgba(255,225,166,0.4)', marginTop: 2 }}>% ao ano que seu dinheiro rende</div>
-                  </div>
-                  <span className="number gold" style={{ fontSize: 20 }}>{percRendimento}%</span>
-                </div>
-                <input type="range" min="4" max="20" value={percRendimento} onChange={(e) => setPercRendimento(parseInt(e.target.value))} />
-              </div>
+      <div style={{ maxWidth: 600, margin: '0 auto' }}>
+        
+        {!revealed ? (
+          <>
+            {/* Pergunta Inicial */}
+            <div style={{ textAlign: 'center', marginBottom: 60 }}>
+              <p className="label" style={{ marginBottom: 16 }}>A pergunta que define tudo</p>
+              <h1 style={{ fontSize: 'clamp(28px, 5vw, 40px)', fontWeight: 600, lineHeight: 1.3, marginBottom: 0 }}>
+                Quanto você quer<br/>ganhar por mês?
+              </h1>
             </div>
-          </div>
-        )}
 
-        <div style={{ textAlign: 'center', marginTop: 36, fontSize: 12, color: 'rgba(255,225,166,0.25)', fontWeight: 500, letterSpacing: '0.15em' }}>RECONECTA</div>
+            {/* Input */}
+            <div style={{ textAlign: 'center', marginBottom: 48 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginBottom: 32 }}>
+                <span style={{ fontSize: 32, fontWeight: 300, color: '#999' }}>R$</span>
+                <input
+                  type="text"
+                  value={ganhoDesejado.toLocaleString('pt-BR')}
+                  onChange={(e) => {
+                    const value = parseInt(e.target.value.replace(/\D/g, '')) || 0;
+                    setGanhoDesejado(Math.min(value, 10000000));
+                  }}
+                  className="mono"
+                  style={{ background: 'transparent', border: 'none', fontSize: 'clamp(48px, 12vw, 80px)', fontWeight: 700, color: '#000', width: '100%', outline: 'none', textAlign: 'center' }}
+                />
+              </div>
+              <input type="range" min="5000" max="500000" step="5000" value={ganhoDesejado} onChange={(e) => setGanhoDesejado(parseInt(e.target.value))} style={{ maxWidth: 400 }} />
+            </div>
+
+            {/* CTA */}
+            <div style={{ textAlign: 'center' }}>
+              <button className="btn" onClick={() => setRevealed(true)}>
+                Descobrir meu número
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            {/* Resultado - Tela Instagramável */}
+            <div className="fade-in" style={{ textAlign: 'center' }}>
+              
+              <p className="label" style={{ marginBottom: 8 }}>Para ganhar {formatCurrency(ganhoDesejado)}/mês</p>
+              <p style={{ fontSize: 18, color: '#666', marginBottom: 48, fontWeight: 400 }}>esse é o seu número:</p>
+              
+              {/* O NÚMERO */}
+              <div style={{ marginBottom: 16 }}>
+                <div className="mono big-number">{formatCurrency(faturamentoMensal)}</div>
+                <p style={{ fontSize: 14, color: '#999', marginTop: 8 }}>de faturamento por mês</p>
+              </div>
+
+              <div style={{ width: 40, height: 1, background: '#e0e0e0', margin: '40px auto' }}></div>
+
+              {/* Breakdown Minimalista */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 40, textAlign: 'left' }}>
+                <div className="card">
+                  <p className="label" style={{ marginBottom: 4 }}>Lucro mensal</p>
+                  <p className="mono" style={{ fontSize: 24, fontWeight: 700 }}>{formatCurrency(lucroMensal)}</p>
+                </div>
+                <div className="card">
+                  <p className="label" style={{ marginBottom: 4 }}>Você retira</p>
+                  <p className="mono" style={{ fontSize: 24, fontWeight: 700 }}>{formatCurrency(ganhoDesejado)}</p>
+                </div>
+                <div className="card">
+                  <p className="label" style={{ marginBottom: 4 }}>Sobra pro caixa</p>
+                  <p className="mono" style={{ fontSize: 24, fontWeight: 700 }}>{formatCurrency(economiaMensal)}</p>
+                </div>
+                <div className="card">
+                  <p className="label" style={{ marginBottom: 4 }}>Economia/ano</p>
+                  <p className="mono" style={{ fontSize: 24, fontWeight: 700 }}>{formatCurrency(economiaAnual)}</p>
+                </div>
+              </div>
+
+              {/* Liberdade Financeira */}
+              <div style={{ background: '#000', color: '#fff', borderRadius: 20, padding: '32px 24px', marginBottom: 32, textAlign: 'center' }}>
+                <p className="label" style={{ color: '#666', marginBottom: 4 }}>Liberdade financeira</p>
+                <p style={{ fontSize: 14, color: '#999', marginBottom: 16 }}>Para viver de renda com {formatCurrency(ganhoDesejado)}/mês</p>
+                <div className="mono" style={{ fontSize: 'clamp(28px, 7vw, 44px)', fontWeight: 700, marginBottom: 8 }}>{formatCurrency(investimentoNecessario)}</div>
+                <p style={{ fontSize: 13, color: '#666' }}>investidos a {percRendimento}% a.a.</p>
+                <div style={{ width: 40, height: 1, background: '#333', margin: '20px auto' }}></div>
+                <p style={{ fontSize: 13, color: '#666', marginBottom: 4 }}>Tempo até lá</p>
+                <p className="mono" style={{ fontSize: 28, fontWeight: 700 }}>{formatYears(anosIndependencia)}</p>
+              </div>
+
+              {/* Ações */}
+              <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
+                <button className="btn-ghost btn" onClick={() => setRevealed(false)}>Recalcular</button>
+                <button className="btn-ghost btn" onClick={() => setShowConfig(!showConfig)}>
+                  {showConfig ? 'Fechar' : 'Ajustar %'}
+                </button>
+              </div>
+
+              {/* Configurações */}
+              {showConfig && (
+                <div style={{ marginTop: 32, textAlign: 'left' }}>
+                  <div className="card" style={{ display: 'grid', gap: 24 }}>
+                    <div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+                        <span className="label">Margem de lucro</span>
+                        <span className="mono" style={{ fontWeight: 700 }}>{percLucro}%</span>
+                      </div>
+                      <input type="range" min="10" max="80" value={percLucro} onChange={(e) => setPercLucro(parseInt(e.target.value))} />
+                    </div>
+                    <div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+                        <span className="label">% retirada do lucro</span>
+                        <span className="mono" style={{ fontWeight: 700 }}>{percGanhos}%</span>
+                      </div>
+                      <input type="range" min="10" max="90" value={percGanhos} onChange={(e) => setPercGanhos(parseInt(e.target.value))} />
+                    </div>
+                    <div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+                        <span className="label">Rendimento anual</span>
+                        <span className="mono" style={{ fontWeight: 700 }}>{percRendimento}%</span>
+                      </div>
+                      <input type="range" min="4" max="20" value={percRendimento} onChange={(e) => setPercRendimento(parseInt(e.target.value))} />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Footer sutil */}
+              <p style={{ marginTop: 48, fontSize: 11, color: '#ccc', letterSpacing: '0.1em' }}>RECONECTA</p>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
